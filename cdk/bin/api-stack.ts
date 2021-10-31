@@ -3,6 +3,7 @@ import * as s3 from "@aws-cdk/aws-s3";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import * as iam from "@aws-cdk/aws-iam";
 import * as apigateway from "@aws-cdk/aws-apigateway";
+import * as lambda from "@aws-cdk/aws-lambda";
 
 export class ApiStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -27,6 +28,13 @@ export class ApiStack extends cdk.Stack {
             ]
         });
 
+        const createSeedLambda = new lambda.Function(this, 'createSeed', {
+            role: roleAPI,
+            code: lambda.Code.fromAsset("./bin/lambda"),
+            handler: "createSeed.handler",
+            runtime: lambda.Runtime.NODEJS_14_X
+        });
+
         const api = new apigateway.RestApi(this,'API');
         api.root.addMethod('ANY')
 
@@ -35,7 +43,7 @@ export class ApiStack extends cdk.Stack {
         seeds.addMethod("GET");
         // create new seed
         seeds.addMethod("POST",
-            // new apigateway.LambdaIntegration()
+            new apigateway.LambdaIntegration(createSeedLambda)
         );
         const seedItem = seeds.addResource("{ID}");
         // download a specific seed
