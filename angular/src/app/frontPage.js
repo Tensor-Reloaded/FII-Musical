@@ -1,5 +1,5 @@
 
-function myFunction() {
+export function myFunction() {
   const fileSelector = document.getElementById('file-selector');
   fileSelector.change(function(e) {
     console.log("ASFDAFADASF");
