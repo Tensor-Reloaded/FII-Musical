@@ -32,7 +32,11 @@ export class ApiStack extends cdk.Stack {
             role: roleAPI,
             code: lambda.Code.fromAsset("./bin/lambda"),
             handler: "createSeed.handler",
-            runtime: lambda.Runtime.NODEJS_14_X
+            runtime: lambda.Runtime.NODEJS_14_X,
+            environment: {
+                DB: tableDB.tableName,
+                bucket: seedBucket.bucketName
+            }
         });
 
         const api = new apigateway.RestApi(this,'API');
