@@ -68,7 +68,7 @@
 
   .content {
     display: flex;
-    margin: 100px 32px 32px 32px;
+    margin: 50px auto auto auto;
     padding: 33px 33px 33px 33px;
     max-width: 960px;
     max-height:1000px;
@@ -101,8 +101,8 @@
     border-radius: 4px;
     border: 1px solid #eee;
     background-color: #fafafa;
-    height: 600px;
-    width: 200px;
+    height: auto;
+    width: auto;
     margin: 0 8px 16px;
     padding: 50px;
     display: flex;
@@ -117,10 +117,6 @@
     margin-right: 0;
   }
 
-  .card.card-small {
-    height: 16px;
-    width: 168px;
-  }
 
   .card-container .card:not(.highlight-card) {
     cursor: pointer;
@@ -329,13 +325,22 @@
 
 <div class="content" id="ourAngular">
 
-  <div class="card highlight-card card-small">
+  <div class="card highlight-card">
     <div>
 
-      <p>Click on the "Browse" button to upload a file:</p>
+      <p>Click on the "Browse..." button to upload a file:</p>
+      <form action="NotImplemented">
+        <label for="vehicle2"> Seed</label><br>
+        <input type="file" id="File" name="File"><br>
 
-      <button type="button" name="button" (click)="DownloadStuff()">Browse</button>
+        <input type="checkbox" id="model1" name="model1" value="Model 1">
+        <label for="vehicle2"> I want Model 1</label><br>
 
+        <input type="checkbox" id="model2" name="model2" value="Model 2">
+        <label for="vehicle2"> I want Model 2</label><br>
+
+        <input type="submit" value="Submit" (click)="DownloadStuff()">
+      </form>
     </div>
 
   </div>
