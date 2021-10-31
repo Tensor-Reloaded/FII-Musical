@@ -4,11 +4,12 @@ import * as s3Deployment from '@aws-cdk/aws-s3-deployment'
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
 
+
 export interface StaticSiteProps {
   domainName: string;
 }
 
-export class CdkStack extends cdk.Stack {
+export class SiteStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, siteProps: StaticSiteProps, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -47,5 +48,6 @@ export class CdkStack extends cdk.Stack {
           },
       )
     });
+
   }
 }

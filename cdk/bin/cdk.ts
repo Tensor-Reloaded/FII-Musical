@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import {CdkStack} from './cdk-stack';
+import {SiteStack} from './site-stack';
+import {ApiStack} from "./api-stack";
+
+const environment = {account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION}
 
 const app = new cdk.App();
-new CdkStack(app, 'CdkStack',
+
+new SiteStack(app, 'CdkStack',
     {domainName: "fiimusical.ml"},
-    {env: {account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION},
+    {env: environment,
     });
+new ApiStack(app, 'APIStack', {env: environment});
