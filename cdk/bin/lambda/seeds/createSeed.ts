@@ -4,13 +4,12 @@ const AWS = require("aws-sdk");
 
 export async function handler (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
 
-    const s3Client = new AWS.S3();
-    const dbClient:DocumentClient  = new AWS.DynamoDB.DocumentClient();
+    const anyNull = (arr: any[]) => arr.some(x => x === undefined || x === null);
 
     const db = process.env.DB;
     const bucket = process.env.bucket;
 
-    if (db == undefined || bucket == undefined) {
+    if (anyNull([db, bucket])) {
         return {
             statusCode: 500,
             body: "Environment is undefined."
@@ -49,7 +48,11 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
     // @ts-ignore
     requestDB.Item.genre = jsonBody.genre;
 
+    const s3Client = new AWS.S3();
+    const dbClient:DocumentClient  = new AWS.DynamoDB.DocumentClient();
+
     try {
+        // @ts-ignore
         await dbClient.put(requestDB).promise();
     } catch(err) {
         return {

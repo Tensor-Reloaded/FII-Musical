@@ -30,7 +30,7 @@ export class ApiStack extends cdk.Stack {
 
         const createSeedLambda = new lambda.Function(this, 'createSeed', {
             role: roleAPI,
-            code: lambda.Code.fromAsset("./bin/lambda"),
+            code: lambda.Code.fromAsset("./bin/lambda/seeds"),
             handler: "createSeed.handler",
             runtime: lambda.Runtime.NODEJS_14_X,
             environment: {
@@ -39,21 +39,41 @@ export class ApiStack extends cdk.Stack {
             }
         });
 
+        const deleteSeedFunction = new lambda.Function(this, 'deleteSeed', {
+            role: roleAPI,
+            code: lambda.Code.fromAsset("./bin/lambda/seeds"),
+            handler: "deleteSeed.handler",
+            runtime: lambda.Runtime.NODEJS_14_X,
+            environment: {
+                DB: tableDB.tableName,
+                bucket: seedBucket.bucketName
+            }
+        });
+
+        const downloadSeedFunction = new lambda.Function(this, 'downloadSeed', {
+            role: roleAPI,
+            code: lambda.Code.fromAsset("./bin/lambda/seeds"),
+            handler: "downloadSeed.handler",
+            runtime: lambda.Runtime.NODEJS_14_X,
+            environment: { bucket: seedBucket.bucketName}
+        });
+
         const api = new apigateway.RestApi(this,'API');
-        api.root.addMethod('ANY')
 
         const seeds = api.root.addResource('seeds');
         // list all seeds with pagination
         seeds.addMethod("GET");
         // create new seed
         seeds.addMethod("POST",
-            new apigateway.LambdaIntegration(createSeedLambda)
-        );
+            new apigateway.LambdaIntegration(createSeedLambda));
+
         const seedItem = seeds.addResource("{ID}");
         // download a specific seed
-        seedItem.addMethod("GET");
+        seedItem.addMethod("GET",
+            new apigateway.LambdaIntegration(downloadSeedFunction));
         // delete a seed
-        seedItem.addMethod("DELETE");
+        seedItem.addMethod("DELETE",
+            new apigateway.LambdaIntegration(deleteSeedFunction));
 
         // list all models
         const models = api.root.addResource('models');
