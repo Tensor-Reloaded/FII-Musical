@@ -1,9 +1,11 @@
 
-export function myFunction() {
-  const fileSelector = document.getElementById('file-selector');
-  fileSelector.change(function(e) {
-    console.log("ASFDAFADASF");
-  });
+export class fct{
+  myFunction() {
+    const fileSelector = document.getElementById('file-selector');
+    fileSelector.change(function(e) {
+      console.log("ASFDAFADASF");
+    });
+  }
 }
 
 var myExtObject = (function() {
