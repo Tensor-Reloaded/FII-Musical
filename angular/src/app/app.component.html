@@ -299,7 +299,6 @@
   }
 </style>
 <body>
-
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
   <img
@@ -334,6 +333,7 @@
         <input type="file" id="File" name="File" onchange="console.log(event.target.files);
                                                       var reader = new FileReader();
                                                       var readerContent;
+
                                                       reader.readAsText(event.target.files[0], 'UTF-8');
                                                       reader.onload = function (evt) {
                                                         console.log(evt.target.result);
