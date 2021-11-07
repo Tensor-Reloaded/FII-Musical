@@ -1,4 +1,4 @@
-
+// Not tested, don't use
 export class fct{
   myFunction() {
     const fileSelector = document.getElementById('file-selector');
