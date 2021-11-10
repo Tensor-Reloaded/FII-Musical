@@ -26,7 +26,7 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
         ExclusiveStartKey: exclusiveStartKey,
         FilterExpression: "ENTRY = :e",
         ExpressionAttributeValues: {
-            ":e": "SEED"
+            ":e": "MODEL"
         }
     };
 

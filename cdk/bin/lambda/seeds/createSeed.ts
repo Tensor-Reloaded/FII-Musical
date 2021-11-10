@@ -49,7 +49,7 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
     requestDB.Item.genre = jsonBody.genre;
 
     const s3Client = new AWS.S3();
-    const dbClient:DocumentClient  = new AWS.DynamoDB.DocumentClient();
+    const dbClient:DocumentClient = new AWS.DynamoDB.DocumentClient();
 
     try {
         // @ts-ignore
