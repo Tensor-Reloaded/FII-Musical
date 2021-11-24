@@ -1,21 +1,22 @@
 var seed
 var seedName
 
+class submitMonitor{
+  constructor(){
+    this.uploadedFlag = false;
+    this.submitedFlag = false;
+  }
+  handleViolation(){
+    alert("File should be selected with browse before pressing this button");
+  }
+}
 
-
-
-
-
-
-
-
-
-
+var submitedMonitor = new submitMonitor()
 
 function UploadFile()
 {
-  //console.log(event.target.files);
   seedName = event.target.files;
+  console.log(seedName);
   var reader = new FileReader();
   reader.readAsText(event.target.files[0], "UTF-8");
   reader.onload = function (evt) {
@@ -33,19 +34,31 @@ function UploadFile()
     };
     response = fetch(Url, parameters);
   }
+  if(seedName != null){
+    submitedMonitor.uploadedFlag = true;
+  }
 }
 
 
 class DownloadManager{
   ManageDownload(){
-    console.log("Recorded Seed is: ");
-    console.log(seed);
+    if (submitedMonitor.uploadedFlag == true) {
+      console.log("Seed was properly cached");
+      submitedMonitor.submitedFlag = true;
 
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:attachment/text,' + encodeURI(seed);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = 'myFile.txt';
-    hiddenElement.click();
+      console.log("Recorded Seed is: ");
+      console.log(seed);
+
+      var hiddenElement = document.createElement('a');
+      hiddenElement.href = 'data:attachment/text,' + encodeURI(seed);
+      hiddenElement.target = '_blank';
+      hiddenElement.download = 'myFile.txt';
+      hiddenElement.click();
+    }
+    else{
+      console.log("Alerting Download Manager Failure");
+      submitedMonitor.handleViolation();
+    }
   }
 }
 const MainDownloadManager = new DownloadManager();
@@ -88,11 +101,18 @@ function inject(target, aspect, advice, pointcut, method = null) {
 
 }
 
+function stoperror() {
+   return true;
+}
 
 function loggingAspect() {
-  console.log(`Aspect detected the file: ${seedName[0].name}`)
-  console.log(`of size: ${seedName[0].size}`)
-  console.log(`and with type: ${seedName[0].type}`)
+  try{
+    console.log(`Aspect detected the file: ${seedName[0].name}`)
+    console.log(`of size: ${seedName[0].size}`)
+    console.log(`and with type: ${seedName[0].type}`)
+  }catch(e){
+    stoperror(e);
+  }
 }
 
 inject(MainDownloadManager, loggingAspect, "before", "methods")
