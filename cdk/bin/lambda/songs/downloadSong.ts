@@ -16,7 +16,7 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
         }
     }
 
-    const s3Client = new AWS.S3();
+    const s3Client = new AWS.S3({signatureVersion: "v4"});
 
     const s3Location = {Bucket: bucket, Key: id};
     try {
