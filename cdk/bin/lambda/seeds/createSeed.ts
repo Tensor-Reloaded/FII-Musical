@@ -57,7 +57,7 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
     } catch(err) {
         return {
             statusCode: 400,
-            body: JSON.stringify(err)
+            body: `Failed to add the entry in the data base. Error: ${err}`
         }
     }
 
